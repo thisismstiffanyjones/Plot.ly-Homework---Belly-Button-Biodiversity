@@ -3,39 +3,40 @@ var sampleData;
 function populateIntialData() {
     d3.json("samples.json", function(data) {
         this.sampleData = data;
-        d3.select("#selDataset").selectAll("option").data(data.names).enter().append("option").text(function (d){return d;}).attr("value", function (d) {return d;});
+        d3.select("#selDataset").selectAll("option").data(data.names).enter()
+        .append("option").text(function (d){return d;}).attr("value", function (d) {return d;});
 
         var selectedOption = d3.select("#selDataset").property("value"); 
 
         // draw bar graph with selectedOption
         populateBarGraph(selectedOption);
+
         // draw bubble chart with selectedOption
         populateBubbleGraph(selectedOption);
+
         // draw demographics with selectedOption
         populateDemographics(selectedOption);
     });
 }
 
 function optionChanged(selectedValue) {
-        console.log(selectedValue);
-
         // draw bar graph with selectedOption
         populateBarGraph(selectedValue);
+
         // draw bubble chart with selectedOption
         populateBubbleGraph(selectedValue);
+
         // draw demographics with selectedOption
         populateDemographics(selectedValue);
 }
 
 function populateBarGraph(selectedOption) {
     var foundObject = this.sampleData.samples.find(element => element.id == selectedOption);
-    console.log(foundObject);
 
     var xvalues = foundObject.sample_values.slice(0,10).reverse();
     var otu_ids = foundObject.otu_ids.slice(0,10).reverse();
     var yvalues = [];
     otu_ids.forEach(element => yvalues.push("OTU " + element));
-    console.log(yvalues);
     var otu_labels = foundObject.otu_labels.slice(0,10).reverse();
 
     var data = [{
@@ -51,7 +52,6 @@ function populateBarGraph(selectedOption) {
 
 function populateBubbleGraph(selectedOption) {
     var foundObject = this.sampleData.samples.find(element => element.id == selectedOption);
-    console.log(foundObject);
 
     var xValues = foundObject.otu_ids;
     var yValues = foundObject.sample_values;
@@ -79,7 +79,6 @@ function populateBubbleGraph(selectedOption) {
 
 function populateDemographics(selectedOption) {
     var foundObject = this.sampleData.metadata.find(element => element.id == selectedOption);
-    console.log(foundObject);
 
     const leftSide = Object.keys(foundObject);
     const rightSide = Object.values(foundObject);
